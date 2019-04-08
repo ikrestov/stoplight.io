@@ -341,8 +341,8 @@ export default {
         breadCrumbs: [{ title: 'Home', path: '/' }, { title: 'Blog', path: '/blog' }, { title: props.title }],
         hero: {
           aligned: 'left',
+          contentBgImage: props.image,
         },
-        bodyImage: props.image,
         meta: {
           ...props.meta,
           jld: {
