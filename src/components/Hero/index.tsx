@@ -225,6 +225,8 @@ export const Hero: React.FunctionComponent<IHero> = ({
   return (
     <React.Fragment>
       <div key="main" className="relative overflow-hidden">
+        <div className={cn(headerHeightClass, 'w-100')} />
+
         <div
           className={cn('absolute z-0 border-4 border-lighten-300 overflow-hidden', {
             [`bg-${bgColor}`]: bgColor,
@@ -250,144 +252,143 @@ export const Hero: React.FunctionComponent<IHero> = ({
           }}
         />
 
-        <div className={cn(headerHeightClass, 'w-100')} />
-
-        <div className={cn('relative', 'w-100')}>
-          
-          {contentBgImage && (
-            <div
-              className={cn('absolute pin z-0')}
-              style={{
-                background: `url("${contentBgImage}") no-repeat 50% 50%`,
-                backgroundSize: 'cover',
-              }}
-            >
-              {contentBgOverlay && (<div
-                className={cn('absolute pin z-0')}
-                style={{background: contentBgOverlay}}
-              />)}
-            </div>
-          )}
-
+        {contentBgImage && (
           <div
-            className={cn(
-              containerClassName,
-              `container text-white flex flex-col pt-32 md:pt-24 relative z-5 text-${aligned}`
-            )}
+            className={cn('absolute pin z-0')}
+            style={{
+              background: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("${contentBgImage}")`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: '50% 50%',
+            }}
           >
-            <div
-              className={cn('mb-24', {
-                'mx-auto': !aligned || aligned === 'center',
-                'ml-auto w-2/3 md:w-full': aligned === 'right',
-                'mr-auto w-2/3 md:w-full': aligned === 'left',
-              })}
-            >
-              {breadCrumbs && breadCrumbs.length ? (
-                <div className="text-white opacity-75 font-semibold mb-4 flex items-center">
-                  {breadCrumbs.map((breadCrumb, index) => (
-                    <React.Fragment key={index}>
-                      <Link className="text-white" to={breadCrumb.path}>
-                        {breadCrumb.title}
-                      </Link>
-                      {index < breadCrumbs.length - 1 ? <span className="mx-2">></span> : null}
-                    </React.Fragment>
-                  ))}
-                </div>
-              ) : null}
+            {contentBgOverlay && (<div
+              className={cn('absolute pin z-0')}
+              style={{background: contentBgOverlay}}
+            />)}
+          </div>
+        )}
 
-              {pageName && <div className="uppercase text-white opacity-75 font-semibold mb-4">{pageName}</div>}
+        <div
+          className={cn(
+            containerClassName,
+            `container text-white flex flex-col pt-32 md:pt-24 relative z-5 text-${aligned}`,
+          )}
+          style={(
+            contentBgImage ? {textShadow: `rgba(0, 0, 0, 0.5) 1px 1px 0px`} : {}
+          )}
+        >
+          <div
+            className={cn('mb-24', {
+              'mx-auto': !aligned || aligned === 'center',
+              'ml-auto w-2/3 md:w-full': aligned === 'right',
+              'mr-auto w-2/3 md:w-full': aligned === 'left',
+            })}
+          >
+            {breadCrumbs && breadCrumbs.length ? (
+              <div className="text-white opacity-75 font-semibold mb-4 flex items-center">
+                {breadCrumbs.map((breadCrumb, index) => (
+                  <React.Fragment key={index}>
+                    <Link className="text-white" to={breadCrumb.path}>
+                      {breadCrumb.title}
+                    </Link>
+                    {index < breadCrumbs.length - 1 ? <span className="mx-2">></span> : null}
+                  </React.Fragment>
+                ))}
+              </div>
+            ) : null}
 
-              <h1>{title}</h1>
+            {pageName && <div className="uppercase text-white opacity-75 font-semibold mb-4">{pageName}</div>}
 
-              {subtitle && (
-                <div
-                  className={cn('font-default opacity-75 text-xl max-w-lg mt-4 md:mt-6', {
-                    'mx-auto': !aligned || aligned === 'center',
-                    'ml-auto': aligned === 'right',
-                    'mr-auto': aligned === 'left',
-                  })}
-                >
-                  {subtitle}
-                </div>
-              )}
+            <h1>{title}</h1>
 
-              {author && (
-                <div>
-                  <HeroAuthor className="mt-6 text-white opacity-75" {...author} />
-                </div>
-              )}
-            </div>
-
-            {cta && (
-              <CallToAction
-                className={cn('pb-24 md:pb-4', {
-                  'mx-auto': aligned === 'center',
+            {subtitle && (
+              <div
+                className={cn('font-default opacity-75 text-xl max-w-lg mt-4 md:mt-6', {
+                  'mx-auto': !aligned || aligned === 'center',
                   'ml-auto': aligned === 'right',
                   'mr-auto': aligned === 'left',
                 })}
-                {...cta}
-              />
+              >
+                {subtitle}
+              </div>
             )}
 
-            {!cards.length && heroButtons.length ? (
-              <div className="flex flex-wrap mx-auto pb-24 md:pt-16">
-                {heroButtons.map((button, i) => (
-                  <HeroButton key={i} color={bgColor} {...button} />
-                ))}
+            {author && (
+              <div>
+                <HeroAuthor className="mt-6 text-white opacity-75" {...author} />
               </div>
-            ) : null}
-
-            {cards.length ? (
-              <div className="flex mx-auto md:flex-col md:pt-16">
-                {cards.map((card, i) => (
-                  <HeroCard key={i} index={i + 1} {...card} />
-                ))}
-              </div>
-            ) : null}
+            )}
           </div>
 
-          {heroTabs.length > 0 ? <Tabs tabs={heroTabs} /> : null}
-
-          {particles && (
-            <div className="absolute z-1 sm:hidden" style={{ left: -100, top: -100, right: -100, bottom: -100 }}>
-              {Particles && (
-                <Particles
-                  style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
-                  params={{
-                    fps_limit: 15,
-                    retina_detect: false, // possible performance issues when true
-                    particles: {
-                      number: {
-                        value: 160,
-                        density: {
-                          enable: false,
-                        },
-                      },
-                      size: {
-                        value: 3,
-                        random: true,
-                        anim: {
-                          speed: 4,
-                          size_min: 0.3,
-                        },
-                      },
-                      line_linked: {
-                        enable: false,
-                      },
-                      move: {
-                        random: true,
-                        speed: 1,
-                        direction: 'top',
-                        out_mode: 'out',
-                      },
-                    },
-                  }}
-                />
-              )}
-            </div>
+          {cta && (
+            <CallToAction
+              className={cn('pb-24 md:pb-4', {
+                'mx-auto': aligned === 'center',
+                'ml-auto': aligned === 'right',
+                'mr-auto': aligned === 'left',
+              })}
+              {...cta}
+            />
           )}
+
+          {!cards.length && heroButtons.length ? (
+            <div className="flex flex-wrap mx-auto pb-24 md:pt-16">
+              {heroButtons.map((button, i) => (
+                <HeroButton key={i} color={bgColor} {...button} />
+              ))}
+            </div>
+          ) : null}
+
+          {cards.length ? (
+            <div className="flex mx-auto md:flex-col md:pt-16">
+              {cards.map((card, i) => (
+                <HeroCard key={i} index={i + 1} {...card} />
+              ))}
+            </div>
+          ) : null}
         </div>
 
+        {heroTabs.length > 0 ? <Tabs tabs={heroTabs} /> : null}
+
+        {particles && (
+          <div className="absolute z-1 sm:hidden" style={{ left: -100, top: -100, right: -100, bottom: -100 }}>
+            {Particles && (
+              <Particles
+                style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+                params={{
+                  fps_limit: 15,
+                  retina_detect: false, // possible performance issues when true
+                  particles: {
+                    number: {
+                      value: 160,
+                      density: {
+                        enable: false,
+                      },
+                    },
+                    size: {
+                      value: 3,
+                      random: true,
+                      anim: {
+                        speed: 4,
+                        size_min: 0.3,
+                      },
+                    },
+                    line_linked: {
+                      enable: false,
+                    },
+                    move: {
+                      random: true,
+                      speed: 1,
+                      direction: 'top',
+                      out_mode: 'out',
+                    },
+                  },
+                }}
+              />
+            )}
+          </div>
+        )}
       </div>
 
       {image && <HeroImage {...image} />}
